@@ -1,0 +1,52 @@
+{
+  "name": "bedrock-fsb",
+  "version": "0.1.0",
+  "description": "Decode Minecraft Bedrock .fsb (FMOD FSB5 / FADPCM) audio to PCM / WAV in pure TypeScript",
+  "keywords": [
+    "audio",
+    "bedrock",
+    "fadpcm",
+    "fmod",
+    "fsb",
+    "fsb5",
+    "minecraft",
+    "wav"
+  ],
+  "license": "MIT",
+  "author": "RetoRuto9900K",
+  "bin": {
+    "bedrock-fsb": "./dist/cli.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "check": "vp check",
+    "build:wasm": "bash scripts/build-wasm.sh",
+    "verify": "node scripts/verify.mjs",
+    "prepublishOnly": "vp run build",
+    "prepare": "vp config"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite-plus": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  }
+}

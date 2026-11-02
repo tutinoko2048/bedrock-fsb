@@ -12,8 +12,14 @@
     "minecraft",
     "wav"
   ],
+  "homepage": "https://github.com/tutinoko2048/bedrock-fsb#readme",
+  "bugs": "https://github.com/tutinoko2048/bedrock-fsb/issues",
   "license": "MIT",
   "author": "RetoRuto9900K",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tutinoko2048/bedrock-fsb.git"
+  },
   "bin": {
     "bedrock-fsb": "./dist/cli.mjs"
   },

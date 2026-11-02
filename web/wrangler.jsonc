@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "bedrock-fsb",
+  "compatibility_date": "2026-10-23",
+  "routes": [{ "pattern": "bedrock-fsb.retomc.dev", "custom_domain": true }],
+  // 静的ファイルを配るだけなので Worker のスクリプトは持たない
+  "assets": {
+    "directory": "./dist",
+  },
+}

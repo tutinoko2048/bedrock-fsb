@@ -8,3 +8,8 @@ peerDependencyRules:
     - vite
   allowedVersions:
     vite: '*'
+packages:
+  - web
+allowBuilds:
+  esbuild: true
+  workerd: true

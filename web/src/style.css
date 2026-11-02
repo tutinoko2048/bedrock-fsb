@@ -1,0 +1,150 @@
+:root {
+  color-scheme: light dark;
+  --bg: #fafafa;
+  --fg: #1d1d1f;
+  --muted: #6b6b70;
+  --line: #d9d9de;
+  --hover: #ececf0;
+  --accent: #3a7d44;
+  --error: #c0392b;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #18181b;
+    --fg: #ececf0;
+    --muted: #9a9aa2;
+    --line: #34343a;
+    --hover: #2a2a30;
+    --accent: #6fbf73;
+    --error: #ff7b6b;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+h1 {
+  margin: 0 0 8px;
+}
+
+.lead,
+footer {
+  color: var(--muted);
+}
+
+#drop {
+  margin: 24px 0;
+  padding: 40px 16px;
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  text-align: center;
+}
+
+#drop.over {
+  border-color: var(--accent);
+}
+
+.pickers {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+button,
+.button {
+  font: inherit;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:not(:disabled):hover,
+.button:hover {
+  background: var(--hover);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#status {
+  margin-right: auto;
+}
+
+table {
+  width: 100%;
+  margin: 16px 0;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  word-break: break-all;
+}
+
+td:nth-child(2) {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+tr.error td:nth-child(2) {
+  color: var(--error);
+  white-space: normal;
+}
+
+td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.size {
+  display: inline-block;
+  min-width: 5em;
+  margin-right: 4px;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+
+button.icon {
+  vertical-align: middle;
+
+  display: inline-flex;
+  margin-left: 4px;
+  padding: 4px;
+}
+
+button.icon svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+footer a {
+  color: inherit;
+}

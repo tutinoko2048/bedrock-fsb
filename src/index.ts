@@ -1,13 +1,14 @@
 // Minecraft 統合版の .fsb (FSB5) をデコードする。
-// 統合版の音声は FMOD FADPCM (一部 PCM16) なので、その 2 つだけに対応している。
+// 統合版の音声は FMOD FADPCM (一部 PCM16)。加えて 3DS 版などで使われる GCADPCM にも対応している。
 
+import { decodeDSP, readDSPCoefs } from './dsp';
 import { decodeFADPCM } from './fadpcm';
 import { parseFSB5, type FSBStreamHeader } from './fsb5';
 import { PCM } from './pcm';
 
 export { encodeWAV, toAudioBuffer, PCM, type PCMLike, type AudioBufferFactory } from './pcm';
 
-export type FSBStream = Omit<FSBStreamHeader, 'dataOffset' | 'dataSize'>;
+export type FSBStream = Omit<FSBStreamHeader, 'dataOffset' | 'dataSize' | 'dspCoefsOffset'>;
 
 export interface FSB {
   /** FMOD_SOUND_FORMAT の値 (0x10 = FADPCM) */
@@ -65,7 +66,9 @@ export function openFSB(data: ArrayBuffer | ArrayBufferView): FSB {
 
   return {
     codec: header.codec,
-    streams: header.streams.map(({ dataOffset: _o, dataSize: _s, ...rest }) => rest),
+    streams: header.streams.map(
+      ({ dataOffset: _o, dataSize: _s, dspCoefsOffset: _c, ...rest }) => rest,
+    ),
     decode(index = 0) {
       const s = header.streams[index];
       if (!s)
@@ -75,9 +78,16 @@ export function openFSB(data: ArrayBuffer | ArrayBufferView): FSB {
       if (header.codec === 0x10) pcm = decodeFADPCM(data, s.channels, s.samples);
       else if (header.codec === 0x02)
         pcm = decodePCM16(data, s.channels, s.samples, (header.flags & 1) === 1);
-      else {
+      else if (header.codec === 0x06) {
+        if (s.dspCoefsOffset === undefined)
+          throw new Error(`GCADPCM subsong ${index} has no DSP coefficients`);
+        const coefs = readDSPCoefs(buf, s.dspCoefsOffset, s.channels);
+        pcm = decodeDSP(data, s.channels, s.samples, coefs, (header.flags & 2) === 0);
+      } else {
         const name = CODEC_NAMES[header.codec] ?? `0x${header.codec.toString(16)}`;
-        throw new Error(`Unsupported codec: ${name} (only FADPCM and PCM16 are supported)`);
+        throw new Error(
+          `Unsupported codec: ${name} (only FADPCM, GCADPCM and PCM16 are supported)`,
+        );
       }
       return new PCM(s.sampleRate, s.channels, pcm, s.loop);
     },

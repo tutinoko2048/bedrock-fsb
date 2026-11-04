@@ -15,13 +15,15 @@ export interface FSBStreamHeader {
   /** ファイル先頭からの音声データ位置 */
   dataOffset: number;
   dataSize: number;
+  /** GCADPCM の係数 (追加フラグ 0x07) のファイル先頭からの位置 */
+  dspCoefsOffset?: number;
 }
 
 export interface FSBHeader {
   version: number;
   /** FMOD_SOUND_FORMAT の値 (0x10 = FADPCM) */
   codec: number;
-  /** フラグ (bit0: PCM16 がビッグエンディアン) */
+  /** フラグ (bit0: PCM16 がビッグエンディアン / bit1: GCADPCM などがチャンネルごとに連続) */
   flags: number;
   streams: FSBStreamHeader[];
 }
@@ -63,6 +65,7 @@ export function parseFSB5(buf: Uint8Array): FSBHeader {
     let sampleRate = SAMPLE_RATES[(lo >>> 1) & 0xf];
     if (sampleRate === undefined) throw new Error(`Invalid sample rate for subsong ${i}`);
     let loop: FSBStreamHeader['loop'];
+    let dspCoefsOffset: number | undefined;
     off += 8;
 
     // 追加フラグ: [31..25] 種類 / [24..1] サイズ / [0] 続きがあるか
@@ -79,7 +82,7 @@ export function parseFSB5(buf: Uint8Array): FSBHeader {
         // 終端は FMOD 上「含む」なので +1 して半開区間にする
         const end = size > 4 ? dv.getInt32(off + 8, true) + 1 : samples;
         loop = { start, end };
-      }
+      } else if (type === 0x07) dspCoefsOffset = off + 4;
       off += 4 + size;
     }
 
@@ -92,6 +95,7 @@ export function parseFSB5(buf: Uint8Array): FSBHeader {
       loop,
       dataOffset: dataStart + dataOffset,
       dataSize: 0,
+      dspCoefsOffset,
     });
   }
 

@@ -3,8 +3,8 @@
 A library and CLI that decodes Minecraft Bedrock Edition `.fsb` (FMOD FSB5) files to PCM / WAV.
 Pure TypeScript with no dependencies. Works in both Node.js and the browser.
 
-Bedrock's audio is FMOD FADPCM (and some PCM16), so only those two FSB5 codecs are supported.
-Every `.fsb` in [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples) (4761 files) has been verified to decode byte-for-byte identical to vgmstream's output.
+Bedrock's audio is FMOD FADPCM (and some PCM16); GCADPCM (Nintendo DSP ADPCM, used by the 3DS edition) is also supported. Other FSB5 codecs are not.
+Every `.fsb` in [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples) (4761 files) has been verified to decode byte-for-byte identical to vgmstream's output, as have the 3DS edition's GCADPCM `.fsb` files.
 
 ## Usage
 
@@ -50,4 +50,4 @@ pnpm verify <directory containing .fsb files>
 
 ## License
 
-MIT. The FSB5 header parser and the FADPCM decoder are ported from [vgmstream](https://github.com/vgmstream/vgmstream); its notice is included in [LICENSE](LICENSE).
+MIT. The FSB5 header parser and the FADPCM / DSP ADPCM decoders are ported from [vgmstream](https://github.com/vgmstream/vgmstream); its notice is included in [LICENSE](LICENSE).

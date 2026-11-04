@@ -1,6 +1,6 @@
 {
   "name": "bedrock-fsb",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Decode Minecraft Bedrock .fsb (FMOD FSB5 / FADPCM) audio to PCM / WAV in pure TypeScript",
   "keywords": [
     "audio",
